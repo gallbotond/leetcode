@@ -30,3 +30,80 @@ The result of the merge is [1].
 Note that because m = 0, there are no elements in nums1. The 0 is only there to ensure the merge result can fit in nums1.
 */
 
+#include <stdio.h>
+#include <stdlib.h>
+
+void merge(int* nums1, int nums1Size, int m, int* nums2, int nums2Size, int n) {
+
+    // select the bigger and smaller array size
+    int maxSize, minSize, *maxArray, *minArray;
+    if (nums1Size > nums2Size) {
+        maxSize = nums1Size;
+        minSize = nums2Size;
+        maxArray = nums1;
+        minArray = nums2;
+    } else {
+        maxSize = n;
+        minSize = m;
+    }
+
+    // check values
+    printf("maxSize: %d, minSize: %d\n");
+    printf("maxArray:");
+    for (int i = 0; i < maxSize; i++)
+    {
+        printf(" %d,", maxArray[i]);
+    }
+    printf("\nminArray:");
+    for (int i = 0; i < minSize; i++)
+    {
+        printf(" %d,", minArray[i]);
+    }
+
+    // allocate result array
+    int *result = (int*)malloc((maxSize + minSize) * sizeof(int));
+
+    // start sorting until we reach smaller size
+    int j = 0, i = 0, k = 0;
+    while (j < minSize && i < maxSize)
+    {
+        if (minArray[j] < maxArray[i]) {
+            result[k] = minArray[j];
+            j++;
+            k++;
+        }
+        else {
+            result[k] = maxArray[i];
+            i++;
+            k++;
+        }
+    }
+    
+    // put in the remaining numbers
+    if (j == minSize - 1) {
+        for (int x = i; x < maxSize; x++)
+        {
+            result[k] = maxArray[x];
+        }
+    }
+    else {
+        for (int x = j; x < minSize; x++)
+        {
+            result[k] = minArray[x];
+        }
+    }
+
+    printf("result: ");
+    for (int i = 0; i < minSize + maxSize; i++)
+    {
+        printf("%d, ", result[i]);
+    }
+    
+}
+
+int main() {
+    int nums1[] = {1,2,3,0,0,0};
+    int nums2[] = {2,5,6};
+    merge(nums1, 6, 3, nums2, 3, 3);
+    return 0;
+}
